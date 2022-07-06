@@ -1,0 +1,82 @@
+.container {
+    display: grid;
+    grid-template-columns: 0.3fr 2.3fr 0.4fr;
+    grid-template-rows: 0.3fr 2.4fr 0.3fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "header header header"
+      "leftBar main rightBar"
+      "footer footer footer";
+  }
+  
+  .header { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      ". HEADER HEADER"
+      "headerInner HEADER HEADER"
+      ". HEADER HEADER"; 
+    grid-area: header; 
+    background-color: rgb(2, 48, 255);
+    width: 100%
+}
+  
+  .leftBar { grid-area: leftBar; background-color: gold;}
+  
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1.5fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "lilMain lilMain lilMain"
+      "MAIN MAIN MAIN"
+      "MAIN MAIN MAIN";
+    grid-area: main;
+  }
+  
+  .lilMain { grid-area: lilMain; background-color: salmon;}
+  
+  .MAIN {
+       grid-area: MAIN; 
+       background-color: blueviolet;
+    }
+  
+  .rightBar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1.5fr 0.5fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "RIGHT RIGHT RIGHT"
+      "RIGHT RIGHT RIGHT"
+      "lilRight lilRight lilRight";
+    grid-area: rightBar;
+  }
+  
+  .lilRight { grid-area: lilRight; background-color: aquamarine;}
+  
+  .RIGHT { grid-area: RIGHT; background-color: gold;}
+  
+  .footer { grid-area: footer; background-color: yellow;
+    text-align: right;
+    width: 100%;}
+
+    .headerInner {
+        margin-top: 5%;
+        margin-bottom: 5%;
+        align-self: center;
+        justify-self: center;
+        background-color: white;
+    }
+
+    * {
+        padding: 0;
+        margin: 0;
+    }
+  

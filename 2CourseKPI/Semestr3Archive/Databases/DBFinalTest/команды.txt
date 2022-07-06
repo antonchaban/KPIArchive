@@ -1,0 +1,150 @@
+create database if not exists bankDb;
+
+create table users
+(
+    userID      int auto_increment,
+    userName    char(50) not null,
+    userSurname char(50) not null,
+    constraint users_userID_uindex
+        unique (userID)
+);
+
+alter table users
+    add primary key (userID);
+
+
+create table cities
+(
+    cityID   int auto_increment,
+    cityName char(50) not null,
+    constraint cities_cityID_uindex
+        unique (cityID)
+);
+
+alter table cities
+    add primary key (cityID);
+
+
+create table place
+(
+    placeID       int auto_increment,
+    placeStreet   char(100) not null,
+    placeHouseNum int       not null,
+    placeCityID   int       not null,
+    constraint place_placeID_uindex
+        unique (placeID),
+    constraint place_fk
+        foreign key (placeCityID) references cities (cityID)
+);
+
+alter table place
+    add primary key (placeID);
+
+
+create table accounts
+(
+    accountID     int auto_increment,
+    accountUserID int not null,
+    constraint accounts_accountID_uindex
+        unique (accountID),
+    constraint accounts_fk
+        foreign key (accountUserID) references users (userID)
+);
+
+alter table accounts
+    add primary key (accountID);
+
+
+create table atm
+(
+    atmID      int auto_increment,
+    atmName    char(55) not null,
+    atmPlaceID int      not null,
+    constraint atm_atmID_uindex
+        unique (atmID),
+    constraint atm_fk
+        foreign key (atmPlaceID) references place (placeID)
+);
+
+alter table atm
+    add primary key (atmID);
+
+
+create table typeoftrans
+(
+    typeOfTransID   int auto_increment,
+    typeOfTransName int not null,
+    constraint typeOfTrans_typeOfTransID_uindex
+        unique (typeOfTransID)
+);
+
+alter table typeoftrans
+    add primary key (typeOfTransID);
+
+
+alter table typeoftrans modify typeOfTransName char(50) not null;
+
+
+create table transactions
+(
+    transactionID     int auto_increment,
+    transactionAtmID  int      not null,
+    transactionAccID  int      not null,
+    transactionTypeID int      not null,
+    transactionValue  double   not null,
+    transactionDate   datetime not null,
+    constraint transactions_transactionID_uindex
+        unique (transactionID),
+    constraint transactions_ATMfk
+        foreign key (transactionAtmID) references atm (atmID),
+    constraint transactions_Accfk
+        foreign key (transactionAccID) references accounts (accountID),
+    constraint transactions_Typefk
+        foreign key (transactionTypeID) references typeoftrans (typeOfTransID)
+);
+
+alter table transactions
+    add primary key (transactionID);
+
+--------------------------
+
+a)
+select u.userID, sum(transactionValue)
+from bankdb.transactions
+inner join bankdb.atm a on transactions.transactionAtmID = a.atmID
+inner join bankdb.accounts a2 on transactions.transactionAccID = a2.accountID
+inner join bankdb.users u on a2.accountUserID = u.userID
+where
+(transactionDate between '2020-12-01 00:00:00' AND '2021-12-01 00:00:00')
+and (a.atmPlaceID = 1)
+and (transactionTypeID = 1)
+group by u.userID
+order by sum(transactionValue);
+
+
+b)
+select pl.placeID
+from bankdb.transactions tr
+inner join bankdb.atm at on tr.transactionAtmID = at.atmID
+inner join bankdb.place pl on at.atmPlaceID = pl.placeID
+where tr.transactionValue > (
+select avg(t.transactionValue) from bankdb.transactions t
+inner join bankdb.atm a on t.transactionAtmID = a.atmID
+inner join bankdb.place p on a.atmPlaceID = p.placeID
+inner join bankdb.cities c on p.placeCityID = c.cityID
+where (c.cityID = 2));
+
+
+c)
+
+d)
+
+e)
+
+select u.userID, u.userName, u.userSurname
+from bankdb.accounts a
+         inner join bankdb.users u on a.accountUserID = u.userID
+    where not exists(select 1
+                   from bankdb.transactions t
+                   where (t.transactionDate between '2021-11-01 00:00:00' AND '2021-12-01 00:00:00')
+                     and t.transactionAccID = a.accountID)

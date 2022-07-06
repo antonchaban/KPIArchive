@@ -1,0 +1,209 @@
+﻿@model Lab3.Models.NotificationBarModel
+
+<div class="grid-container">
+
+    <div class="head under">
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Canvas", "Index", "Home")</li>
+            <li>@Html.ActionLink("Divs", "Page2", "Home")</li>
+        </ul>
+        <ol id="header-list"></ol>
+    </div>
+    <div class="main-center">
+        <ol id="main-center-list"></ol>
+        <input type="button" id="play" value="play">
+    </div>
+    <div class="main" id="main">
+        <div class="work" id="work">
+            <div class="controls" style="text-align: center">
+                <label id="label"></label>
+                <input type="button" id="move" value="start">
+                <input type="button" id="close" value="close">
+            </div>
+            <div id="anim"class="anim">
+                <canvas class="anim-canvas" id="canvas"></canvas>
+            </div>
+        </div>
+
+    </div>
+    <div class="right-bottom">
+        <p>
+            <ol id="right-bottom-list"></ol>
+        </p>
+    </div>
+    <div class="right-top under" id="right-top">
+        <p>
+            <ol id="right-top-list"></ol>
+        </p>
+        <textarea id="right-label"></textarea>
+    </div>
+    <div class="left under" id="left">
+        <ol id="left-list"></ol>
+    </div>
+    <div class="foot under" id="footer">
+        <p class="footerText">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, corrupti? Pol, a bene acipenser. Passion, amnesty,
+            and endurance. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere quaerat voluptate porro laudantium omnis
+            fuga enim dolorem, nulla quisquam accusamus explicabo sit culpa molestias non autem dolor dolore, laborum
+            ratione Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </p>
+    </div>
+
+</div>
+
+
+<script>
+    $(function A() {
+        let label = document.getElementById("label")
+        let rightLabel = document.getElementById("right-label")
+        function setLabel(text) {
+            label.innerHTML = text;
+            $.ajax({
+                url: 'savetext/'+text,
+            }).done(function () {
+
+            });
+        }
+
+        function getCanvasImage(mainCanvas) {
+            mainCanvas.style.backgroundImage = `url(./bicycle_back.svg)`
+
+
+        }
+
+        var x = 10;
+        var y = 10;
+        var r = 10;
+        var step = 1;
+        var width = 0;
+        var height = 0;
+        var moveType = 1;
+        var mover = 0;
+        var stop = false;
+        function anim() {
+            if (moveType % 4 === 1) {
+                x--;
+            } else {
+                if (moveType % 4 === 2) {
+                    y--;
+                } else {
+                    if (moveType % 4 === 3) {
+                        x++;
+                    } else {
+                        y++;
+                    }
+                }
+            }
+            mover++;
+            if (mover === step) {
+                mover = 0;
+                step++;
+                moveType++;
+                if (moveType % 4 === 1) {
+                    setLabel("move left")
+                } else {
+                    if (moveType % 4 === 2) {
+                        setLabel("move up")
+                    } else {
+                        if (moveType % 4 === 3) {
+                            setLabel("move right")
+                        } else {
+                            setLabel("move down")
+                        }
+                    }
+                }
+            }
+           
+
+            if (x + r > width || y + r > height || x - r < 0 || y - r < 0 || stop) {
+                draw(x, y);
+            } else {
+                draw(x, y);
+                requestAnimationFrame(anim); 
+            }
+        }
+
+        move.onclick = e => {
+
+            x = width / 2;
+            y = height / 2;
+            step = 1;
+            r = 10;
+            deltaT = 0;
+            mover = 0;
+            moveType = 1;
+            console.log(x)
+            console.log(y);
+            if (move.value === "reload") {
+                setLabel("reload click")
+                draw(x, y);
+                move.value = "start";
+                stop = true;
+            } else {
+                move.value = "reload";
+                setLabel( "start click")
+                stop = false;
+                anim();
+            }
+
+        }
+        let close = document.getElementById("close")
+        let work = document.getElementById("work")
+        close.onclick = e => {
+            work.style.visibility = 'hidden';
+            setLabel("close click");
+
+            $.ajax({
+                url: 'gettext',
+            }).done(function (data) {
+                rightLabel.value = data
+            });
+        }
+
+        let play = document.getElementById("play")
+        play.onclick = e => {
+            work.style.visibility = 'visible';
+            $.ajax({
+                url: 'clear',
+            }).done(function (data) {
+                rightLabel.value = data
+            });
+            setLabel("play click")
+        }
+
+       
+        var canvas = document.getElementById("canvas");
+        var animArea = document.getElementById("anim");
+        width = animArea.clientWidth;
+        height = animArea.clientHeight;
+        canvas.width = animArea.clientWidth;
+        canvas.height = animArea.clientHeight;
+        canvas.style.width = animArea.clientWidth + "px";
+        canvas.style.height = animArea.clientHeight + "px";
+        console.log(canvas.style.height);
+        x = width / 2;
+        y = height / 2;
+        console.log(width);
+        console.log(height);
+        getCanvasImage(canvas);
+        var ctx = canvas.getContext("2d");
+
+        function circle(x, y, r) {
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2, true);
+            ctx.fill();
+        }
+
+        function clear() {
+            ctx.clearRect(0, 0, width, height);
+        }
+
+        function draw(x, y) {
+            clear(width, height);
+            ctx.fillStyle = "green";
+            circle(x, y, r);
+        }
+
+        draw(x, y);
+    });
+</script>

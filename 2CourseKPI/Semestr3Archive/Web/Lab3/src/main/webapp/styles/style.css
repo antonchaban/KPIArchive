@@ -1,0 +1,160 @@
+header {
+    background-color: rgb(2, 48, 255);
+    grid-column: 1/4;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+}
+
+.innerHeader{
+    align-self: center;
+    justify-self: center;
+}
+
+.inner{
+    padding: 10px;
+    margin: 10px;
+    font-size: 25px;
+    background-color: white;
+}
+
+footer {
+    background-color: yellow;
+    grid-column: 1/4;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+}
+
+.innerFooter{
+    align-self: center;
+    justify-self: center;
+}
+
+.footerText{
+    margin: 10px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    font-size: larger;
+    display: grid;
+    grid-template-areas:
+        "leftBar lilMain rightBar"
+        "leftBar main rightBar"
+        "leftBar main lilRight";
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    grid-template-rows: 0.5fr 2fr 0.5fr;
+}
+
+.main {
+    grid-area: main;
+    background-color: blueviolet;
+    text-align: center;
+    padding: 10px;
+}
+
+.leftBar {
+    grid-area: leftBar;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    background-color: gold;
+    text-align: center;
+    padding: 10px;
+}
+
+.rightBar {
+    grid-area: rightBar;
+    background-color: gold;
+    text-align: center;
+    padding: 10px;
+}
+
+.lilRight {
+    grid-area: lilRight;
+    background-color: aquamarine;
+    text-align: center;
+    padding: 10px;
+}
+
+.lilMain {
+    grid-area: lilMain;
+    background-color: salmon;
+    text-align: center;
+    padding: 10px;
+}
+
+.hidden{
+    display: none;
+}
+
+/**/
+
+#notification_div
+{
+    height:50px;
+    margin:0px;
+    background-color:#2E9AFE;
+    padding:40px;
+}
+#notification_div span
+{
+    padding:15px;
+    background-color:#084B8A;
+    color:#A9D0F5;
+    border-radius:5px;
+}
+
+#btnControl {
+    display: none;
+}
+
+.btn {
+    width: 100%;
+    height: 80%;
+    background: silver;
+    border-radius: 5px;
+    padding: 1px 3px;
+    box-shadow: 1px 1px 1px #000;
+    display: block;
+    text-align: center;
+    background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+    font-family: arial;
+    font-size: 12px;
+    line-height:20px;
+}
+
+.btn:hover {
+    background-image: linear-gradient(to bottom, #c3e3fa, #a5defb);
+}
+
+
+.btn:active {
+    margin-left: 1px 1px 0;
+    box-shadow: -1px -1px 1px #000;
+    outline: 1px solid black;
+    background-image: linear-gradient(to top, #f4f5f5, #dfdddd);
+}
+
+.textToShowSpan{
+    display: none;
+}
+
+.textToShowSpan + #btnControl:checked{
+    display: grid;
+}
+
+
+#btnControl:checked + label {
+    /*width: 70px;
+    height: 74px;
+    line-height: 74px;*/
+    display: none;
+
+}

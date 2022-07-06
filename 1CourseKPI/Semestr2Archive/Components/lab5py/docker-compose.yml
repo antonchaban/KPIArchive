@@ -1,0 +1,13 @@
+services:
+    sender:
+        build: 
+            context: ./broker_send
+            dockerfile: Dockerfile
+
+    receiver:
+        build: 
+            context: ./broker_receive
+            dockerfile: Dockerfile
+        volumes: 
+            - ./log:/usr/src/app/log
+        
